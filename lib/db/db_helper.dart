@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../model/category_model.dart';
 
 class DBHelper {
   static const categoriesCollection = 'Categories';
   static const productsCollection = 'Products';
-  static const purchaseCollection = 'Purchase';
   static const usersCollection = 'Users';
   static const ordersCollection = 'Orders';
   static const ordersDetailsCollection = 'OrderDetails';
@@ -24,8 +22,4 @@ class DBHelper {
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getProductById(
           String id) =>
       _db.collection(productsCollection).doc(id).snapshots();
-
-  static upDateProduct(String id, Map<String, dynamic> map) {
-    return _db.collection(productsCollection).doc(id).update(map);
-  }
 }

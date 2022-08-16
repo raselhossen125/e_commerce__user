@@ -1,10 +1,11 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_build_context_synchronously
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_build_context_synchronously, sized_box_for_whitespace
 
 import 'package:e_commerce__user/untils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../auth/auth_service.dart';
-import 'launcher_page.dart';
+import '../../auth/auth_service.dart';
+import '../launcher_page.dart';
+import 'register_page.dart';
 
 class LogInPage extends StatefulWidget {
   static const routeName = 'log-in';
@@ -40,7 +41,6 @@ class _LogInPageState extends State<LogInPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 20),
                   Text(
                     'Welcome User',
                     style: TextStyle(
@@ -163,54 +163,77 @@ class _LogInPageState extends State<LogInPage> {
                     onTap: () {
                       authenticate();
                     },
-                    child: Container(
-                      height: 50,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
+                    child: Card(
+                      elevation: 7,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
-                        color: appColor.cardColor,
                       ),
-                      child: Center(
-                        child: Text(
-                          'Log In',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                              fontSize: 18),
+                      child: Container(
+                        height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: appColor.cardColor,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Log In',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontSize: 18),
+                          ),
                         ),
                       ),
                     ),
                   ),
                   SizedBox(height: 20),
-                  Container(
-                    height: 45,
-                    width: double.infinity,
-                    margin: EdgeInsets.only(bottom: 20),
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        primary: Colors.black,
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Container(
+                      height: 45,
+                      width: double.infinity,
+                      margin: EdgeInsets.only(bottom: 30),
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.black,
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          side: BorderSide(
+                            color: Colors.grey.withOpacity(0.5),
+                            width: 1,
+                          ),
                         ),
-                        side: BorderSide(
-                          color: Colors.grey.withOpacity(0.5),
-                          width: 1,
+                        child: Text(
+                          'Not Yet Registered? Sign Up',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                              color: Colors.black),
                         ),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(RegisterPage.routeName);
+                        },
                       ),
-                      child: Text(
-                        'Not Yet Registered? Sign Up',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                            color: Colors.black),
-                      ),
-                      onPressed: () {
-
-                      },
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  Text(
+                    'OR',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                  const SizedBox(height: 15),
+                  Image.asset(
+                    'images/google.png',
+                    height: 40,
+                    width: 40,
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(height: 15),
                   Text(
                     error,
                     style: TextStyle(color: Colors.red),
@@ -227,8 +250,9 @@ class _LogInPageState extends State<LogInPage> {
   authenticate() async {
     if (formkey.currentState!.validate()) {
       try {
-        final status = await AuthService.logIn(email_Controller.text, password_Controller.text);
-        if(status) {
+        final status = await AuthService.logIn(
+            email_Controller.text, password_Controller.text);
+        if (status) {
           Navigator.of(context).pushReplacementNamed(LauncherPage.routeName);
         }
         return;

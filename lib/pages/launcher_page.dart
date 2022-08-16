@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import '../auth/auth_service.dart';
-import 'logIn_page.dart';
+import 'auth/logIn_page.dart';
 import 'products_page.dart';
 
 class LauncherPage extends StatefulWidget {

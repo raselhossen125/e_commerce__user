@@ -1,15 +1,12 @@
 // ignore_for_file: avoid_print, unused_local_variable
 
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../db/db_helper.dart';
 import '../model/category_model.dart';
-import '../model/date_model.dart';
 import '../model/product_model.dart';
 import '../model/purchase_model.dart';
 
@@ -36,19 +33,10 @@ class ProductProvider extends ChangeNotifier {
   Stream<DocumentSnapshot<Map<String, dynamic>>> getProductById(String id) =>
       DBHelper.getProductById(id);
 
-
-  CategoryModel getCategoryModelByCatName(String name) {
-    return categoryList.firstWhere((element) => element.catName == name);
-  }
-
-  Future<void> updateproduct(String id, String field, dynamic value) {
-    return DBHelper.upDateProduct(id, {field: value});
-  }
-
   Future<String> updateImage(XFile xFile) async {
     final imagename = DateTime.now().millisecondsSinceEpoch.toString();
     final photoRefarance =
-        FirebaseStorage.instance.ref().child('pictures/$imagename');
+        FirebaseStorage.instance.ref().child('IserImages/$imagename');
     final uploadtask = photoRefarance.putFile(File(xFile.path));
     final snapshort = await uploadtask.whenComplete(() => null);
     return snapshort.ref.getDownloadURL();
