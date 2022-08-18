@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable
 
 import 'package:e_commerce__user/pages/auth/otp_page.dart';
+import 'package:e_commerce__user/provider/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'pages/auth/phone_verify.dart';
 import 'pages/auth/register_page.dart';
 import 'pages/launcher_page.dart';
 import 'pages/auth/logIn_page.dart';
@@ -28,6 +30,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => ProductProvider()),
         ChangeNotifierProvider(create: (context) => OrderProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: const MyApp(),
     ),
@@ -62,6 +65,7 @@ class MyApp extends StatelessWidget {
       routes: {
         LauncherPage.routeName: (_) => LauncherPage(),
         LogInPage.routeName: (_) => LogInPage(),
+        PhoneVerifyPage.routeName: (_) => PhoneVerifyPage(),
         RegisterPage.routeName: (_) => RegisterPage(),
         OtpPage.routeName: (_) => OtpPage(),
         ProductsPage.routeName: (_) => ProductsPage(),

@@ -8,12 +8,14 @@ class NewProductTextField extends StatelessWidget {
   String hintText;
   IconData prefixIcon;
   TextInputType? keyBordType;
+  bool? enable;
 
   NewProductTextField({
     required this.controller,
     required this.hintText,
     required this.prefixIcon,
     this.keyBordType,
+    this.enable,
   });
 
   @override
@@ -21,6 +23,7 @@ class NewProductTextField extends StatelessWidget {
     return TextFormField(
       keyboardType: keyBordType,
       controller: controller,
+      enabled: enable,
       cursorColor: appColor.cardColor,
       style: TextStyle(color: appColor.cardColor, fontWeight: FontWeight.w500),
       decoration: InputDecoration(

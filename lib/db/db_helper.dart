@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce__user/model/user_model.dart';
 
 class DBHelper {
   static const categoriesCollection = 'Categories';
@@ -22,4 +23,19 @@ class DBHelper {
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getProductById(
           String id) =>
       _db.collection(productsCollection).doc(id).snapshots();
+
+  static Future<void> addUser(UserModel userModel) {
+    return _db
+        .collection(usersCollection)
+        .doc(userModel.uId)
+        .set(userModel.toMap());
+  }
+
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getUserByUid(String uid) {
+    return _db.collection(usersCollection).doc(uid).snapshots();
+  }
+
+  static Future<void> updateProfile(String uid, Map<String, dynamic> map) {
+    return _db.collection(usersCollection).doc(uid).update(map);
+  }
 }

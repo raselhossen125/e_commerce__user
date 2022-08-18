@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable, prefer_const_constructors, deprecated_member_use, prefer_is_empty, non_constant_identifier_names, unused_local_variable
 
-import 'package:e_commerce__user/pages/auth/logIn_page.dart';
+import 'package:e_commerce__user/auth/auth_service.dart';
+import 'package:e_commerce__user/pages/auth/phone_verify.dart';
 import 'package:e_commerce__user/pages/auth/register_page.dart';
 import 'package:e_commerce__user/untils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +18,13 @@ class OtpPage extends StatefulWidget {
 class _OtpPageState extends State<OtpPage> {
   String text = '';
   bool isLoading = false;
+  late String phoneNumber;
+
+  @override
+  void didChangeDependencies() {
+    phoneNumber = ModalRoute.of(context)!.settings.arguments as String;
+    super.didChangeDependencies();
+  }
 
   void _onKeyboardTap(String value) {
     setState(() {
@@ -55,132 +63,120 @@ class _OtpPageState extends State<OtpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
-              color: appColor.cardColor.withAlpha(20),
-            ),
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: appColor.cardColor,
-              size: 16,
-            ),
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.white,
-        brightness: Brightness.light,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: <Widget>[
+              Align(
+                alignment: Alignment.centerLeft,
+                child: InkWell(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color.fromARGB(255, 11, 148, 98).withAlpha(200),
+                      ),
+                      child: Icon(
+                        Icons.keyboard_arrow_left_outlined,
+                        color: Colors.white,
+                      )),
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Enter 6 digits verification code sent to your number',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 26,
+                    fontWeight: FontWeight.w500),
+              ),
+              SizedBox(height: 50),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
+                  otpNumberWidget(0),
+                  otpNumberWidget(1),
+                  otpNumberWidget(2),
+                  otpNumberWidget(3),
+                  otpNumberWidget(4),
+                  otpNumberWidget(5),
+                ],
+              ),
+              Spacer(),
+              Card(
+                elevation: 7,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Container(
+                  height: 50,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: appColor.cardColor,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                         Text(
-                            'Enter 6 digits verification code sent to your number',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 26,
-                                fontWeight: FontWeight.w500)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            otpNumberWidget(0),
-                            otpNumberWidget(1),
-                            otpNumberWidget(2),
-                            otpNumberWidget(3),
-                            otpNumberWidget(4),
-                            otpNumberWidget(5),
-                          ],
+                          'Confirm',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontSize: 18),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: InkWell(
+                            onTap: () {
+                              verifyPhone();
+                            },
+                            child: isLoading
+                                ? CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Container(
+                                    height: 30,
+                                    width: 30,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color.fromARGB(
+                                          255, 11, 148, 98),
+                                    ),
+                                    child: Icon(
+                                      Icons.keyboard_arrow_right_outlined,
+                                      color: Colors.white,
+                                    )),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Card(
-                    elevation: 7,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Container(
-                        height: 50,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: appColor.cardColor,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Confirm',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: 18),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: InkWell(
-                                  onTap: () {
-                                    verifyPhone();
-                                  },
-                                  child: isLoading
-                                      ? CircularProgressIndicator(
-                                          color: Colors.white,
-                                        )
-                                      : Container(
-                                          height: 30,
-                                          width: 30,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color.fromARGB(
-                                                255, 11, 148, 98),
-                                          ),
-                                          child: Icon(
-                                            Icons.keyboard_arrow_right_outlined,
-                                            color: Colors.white,
-                                          )),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                  ),
-                  NumericKeyboard(
-                    onKeyboardTap: _onKeyboardTap,
-                    textColor: appColor.cardColor,
-                    rightIcon: Icon(
-                      Icons.backspace,
-                      color: appColor.cardColor,
-                    ),
-                    rightButtonFn: () {
-                      setState(() {
-                        if (text.length != 0) {
-                          text = text.substring(0, text.length - 1);
-                        }
-                      });
-                    },
-                  )
-                ],
+                ),
               ),
-            ),
-          ],
+              NumericKeyboard(
+                onKeyboardTap: _onKeyboardTap,
+                textColor: appColor.cardColor,
+                rightIcon: Icon(
+                  Icons.backspace,
+                  color: appColor.cardColor,
+                ),
+                rightButtonFn: () {
+                  setState(() {
+                    if (text.length != 0) {
+                      text = text.substring(0, text.length - 1);
+                    }
+                  });
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -195,7 +191,9 @@ class _OtpPageState extends State<OtpPage> {
       smsCode: text,
     );
     FirebaseAuth.instance.signInWithCredential(credential).then((value) {
-      Navigator.pushReplacementNamed(context, LogInPage.routeName);
+      AuthService.logOut();
+      Navigator.pushReplacementNamed(context, RegisterPage.routeName,
+          arguments: phoneNumber);
       setState(() {
         isLoading = false;
       });

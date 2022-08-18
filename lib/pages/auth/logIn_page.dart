@@ -1,11 +1,14 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_build_context_synchronously, sized_box_for_whitespace
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce__user/model/user_model.dart';
 import 'package:e_commerce__user/untils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../auth/auth_service.dart';
 import '../launcher_page.dart';
-import 'register_page.dart';
+import 'phone_verify.dart';
 
 class LogInPage extends StatefulWidget {
   static const routeName = 'log-in';
@@ -202,7 +205,7 @@ class _LogInPageState extends State<LogInPage> {
                             borderRadius: BorderRadius.circular(7),
                           ),
                           side: BorderSide(
-                            color: Colors.grey.withOpacity(0.5),
+                            color: appColor.cardBtnColor,
                             width: 1,
                           ),
                         ),
@@ -214,7 +217,8 @@ class _LogInPageState extends State<LogInPage> {
                               color: Colors.black),
                         ),
                         onPressed: () {
-                          Navigator.of(context).pushNamed(RegisterPage.routeName);
+                          Navigator.of(context)
+                              .pushNamed(PhoneVerifyPage.routeName);
                         },
                       ),
                     ),
@@ -227,11 +231,34 @@ class _LogInPageState extends State<LogInPage> {
                         fontSize: 18),
                   ),
                   const SizedBox(height: 15),
-                  Image.asset(
-                    'images/google.png',
-                    height: 40,
-                    width: 40,
-                    fit: BoxFit.cover,
+                  InkWell(
+                    onTap: () {
+                      signInWithGoogle().then((value) {
+                        if (value.user != null) {
+                          final userModel = UserModel(
+                            uId: value.user!.uid,
+                            name: value.user!.displayName ?? 'Not Available',
+                            mobile: value.user!.phoneNumber ?? 'Not Available',
+                            email: value.user!.email!,
+                            userCreationTime: Timestamp.fromDate(
+                                value.user!.metadata.creationTime!),
+                          );
+                          AuthService.addUser(userModel).then((value) {
+                            Navigator.of(context).pushReplacementNamed(LauncherPage.routeName);
+                          });
+                        }
+                      }).catchError((e) {
+                        setState(() {
+                          error = e.toString();
+                        });
+                      });
+                    },
+                    child: Image.asset(
+                      'images/google.png',
+                      height: 40,
+                      width: 40,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   const SizedBox(height: 15),
                   Text(
@@ -262,5 +289,23 @@ class _LogInPageState extends State<LogInPage> {
         });
       }
     }
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }
