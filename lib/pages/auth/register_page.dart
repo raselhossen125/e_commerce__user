@@ -18,6 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
   late String phoneNumber;
   bool passObsecure = true;
   String error = '';
+  bool isLoading = false;
   final formkey = GlobalKey<FormState>();
 
   final email_Controller = TextEditingController();
@@ -160,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           color: appColor.cardColor,
                         ),
                         child: Center(
-                          child: Text(
+                          child: isLoading ? CircularProgressIndicator(color: Colors.white,) : Text(
                             'Register',
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -171,54 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 5),
-                  //   child: Container(
-                  //     height: 45,
-                  //     width: double.infinity,
-                  //     margin: EdgeInsets.only(bottom: 30),
-                  //     child: OutlinedButton(
-                  //       style: OutlinedButton.styleFrom(
-                  //         primary: Colors.black,
-                  //         backgroundColor: Colors.white,
-                  //         shape: RoundedRectangleBorder(
-                  //           borderRadius: BorderRadius.circular(7),
-                  //         ),
-                  //         side: BorderSide(
-                  //           color: Colors.grey.withOpacity(0.5),
-                  //           width: 1,
-                  //         ),
-                  //       ),
-                  //       child: Text(
-                  //         'Not Yet Registered? Sign Up',
-                  //         style: TextStyle(
-                  //             fontWeight: FontWeight.w500,
-                  //             fontSize: 18,
-                  //             color: Colors.black),
-                  //       ),
-                  //       onPressed: () {
-                  //         Navigator.of(context)
-                  //             .pushNamed(PhoneVerifyPage.routeName);
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
-                  // Text(
-                  //   'OR',
-                  //   style: TextStyle(
-                  //       color: Colors.black,
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 18),
-                  // ),
-                  // const SizedBox(height: 15),
-                  // Image.asset(
-                  //   'images/google.png',
-                  //   height: 40,
-                  //   width: 40,
-                  //   fit: BoxFit.cover,
-                  // ),
-                  // const SizedBox(height: 15),
+                  SizedBox(height: 15),
                   Text(
                     error,
                     style: TextStyle(color: Colors.red),
@@ -234,6 +188,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   authenticate() async {
     if (formkey.currentState!.validate()) {
+      isLoading = true;
       try {
         AuthService.register(
           name_Controller.text,

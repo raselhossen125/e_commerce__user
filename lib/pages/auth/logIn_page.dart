@@ -20,6 +20,7 @@ class LogInPage extends StatefulWidget {
 class _LogInPageState extends State<LogInPage> {
   bool passObsecure = true;
   String error = '';
+  bool isLoading = false;
   final formkey = GlobalKey<FormState>();
 
   final email_Controller = TextEditingController();
@@ -52,7 +53,6 @@ class _LogInPageState extends State<LogInPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 5),
                   Container(
                     height: 250,
                     width: double.infinity,
@@ -161,7 +161,7 @@ class _LogInPageState extends State<LogInPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: 35),
                   InkWell(
                     onTap: () {
                       authenticate();
@@ -179,7 +179,7 @@ class _LogInPageState extends State<LogInPage> {
                           color: appColor.cardColor,
                         ),
                         child: Center(
-                          child: Text(
+                          child: isLoading ? CircularProgressIndicator(color: Colors.white,) : Text(
                             'Log In',
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -280,6 +280,7 @@ class _LogInPageState extends State<LogInPage> {
         final status = await AuthService.logIn(
             email_Controller.text, password_Controller.text);
         if (status) {
+          isLoading = true;
           Navigator.of(context).pushReplacementNamed(LauncherPage.routeName);
         }
         return;

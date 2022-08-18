@@ -146,7 +146,7 @@ class PhoneVerifyPage extends StatelessWidget {
                                       _veryficationPhoneNumber();
                                       Navigator.of(context)
                                           .pushNamed(OtpPage.routeName,
-                                              arguments: phoneController.text)
+                                              arguments: phoneController.text,)
                                           .then((_) {
                                         phoneController.clear();
                                       });
@@ -185,7 +185,8 @@ class PhoneVerifyPage extends StatelessWidget {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneController.text,
       verificationCompleted: (PhoneAuthCredential credential) {},
-      verificationFailed: (FirebaseAuthException e) {},
+      verificationFailed: (FirebaseAuthException e) {
+      },
       codeSent: (String verificationid, int? resendToken) {
         vId = verificationid;
       },

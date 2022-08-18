@@ -191,9 +191,10 @@ class _OtpPageState extends State<OtpPage> {
       smsCode: text,
     );
     FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+      AuthService.user!.delete();
       AuthService.logOut();
       Navigator.pushReplacementNamed(context, RegisterPage.routeName,
-          arguments: phoneNumber);
+          arguments: phoneNumber,);
       setState(() {
         isLoading = false;
       });
