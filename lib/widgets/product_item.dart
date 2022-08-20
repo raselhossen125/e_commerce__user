@@ -1,14 +1,14 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:e_commerce__user/model/product_model.dart';
-import 'package:e_commerce__user/untils/colors.dart';
 import 'package:flutter/material.dart';
-
 import '../pages/product_details_page.dart';
 import '../untils/constransts.dart';
 
 class ProductItem extends StatelessWidget {
   final ProductModel productModel;
+  bool isFavorite = false;
+  bool added = false;
 
   ProductItem({
     required this.productModel,
@@ -16,59 +16,69 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed(ProductDetailsPage.routeName,
-            arguments: productModel.id);
-      },
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+    return Padding(
+      padding: EdgeInsets.only(top: 5.0, bottom: 5.0, left: 5.0, right: 5.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).pushNamed(ProductDetailsPage.routeName,
+              arguments: productModel.id);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 3.0,
+                    blurRadius: 5.0)
+              ],
+              color: Colors.white),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Image.network(
-                  productModel.imageUrl!,
-                  height: 130,
-                  width: 150,
-                  fit: BoxFit.contain,
-                ),
+              Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child:
+                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    isFavorite
+                        ? Icon(Icons.favorite, color: Color(0xFFEF7532))
+                        : Icon(Icons.favorite_border, color: Color(0xFFEF7532))
+                  ])),
+              Hero(
+                  tag: productModel.imageUrl!,
+                  child: Container(
+                      height: 75.0,
+                      width: 75.0,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(productModel.imageUrl!),
+                              fit: BoxFit.contain)))),
+              SizedBox(height: 7.0),
+              Text('$currencySymbol ${productModel.salePrice.toString()}',
+                  style: TextStyle(color: Color(0xFFCC8053), fontSize: 14.0)),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Text(productModel.name!,
+                    style: TextStyle(
+                        color: Color(0xFF575E67),
+                        fontSize: 14.0,
+                        overflow: TextOverflow.ellipsis)),
               ),
-              Expanded(
+              Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Container(color: Color(0xFFEBEBEB), height: 1.0)),
+              Padding(
+                padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          productModel.name!,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                              color: Colors.black),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          '$currencySymbol${productModel.salePrice.toString()}',
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.shopping_cart,
-                        color: appColor.cardBtnColor,
-                      ),
-                    ),
+                    Icon(Icons.shopping_basket,
+                        color: Color(0xFFD17E50), size: 13.0),
+                    Text('Add to cart',
+                        style:
+                            TextStyle(color: Color(0xFFD17E50), fontSize: 12.0))
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
