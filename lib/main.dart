@@ -12,6 +12,7 @@ import 'pages/launcher_page.dart';
 import 'pages/auth/logIn_page.dart';
 import 'pages/product_details_page.dart';
 import 'pages/products_page.dart';
+import 'pages/profile_page.dart';
 import 'provider/order_provider.dart';
 import 'provider/product_provider.dart';
 
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
         OtpPage.routeName: (_) => OtpPage(),
         ProductsPage.routeName: (_) => ProductsPage(),
         ProductDetailsPage.routeName: (_) => ProductDetailsPage(),
+        ProfilePage.routeName: (_) => ProfilePage(),
       },
     );
   }

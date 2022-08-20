@@ -72,20 +72,22 @@ class ProductDetailsPage extends StatelessWidget {
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               color: Colors.black,
-                              fontSize: 16,
+                              fontSize: 18,
                             ),
                           ),
                           SizedBox(height: height * 0.0250),
-                          Text(
-                            product.descripton ?? 'Not Available',
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              overflow: TextOverflow.ellipsis,
+                          Expanded(
+                            child: Text(
+                              product.descripton ?? 'Not Available',
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(
+                                color: Colors.black.withOpacity(0.6),
+                                fontSize: 16,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              softWrap: false,
+                              maxLines: 10,
                             ),
-                            softWrap: false,
-                            maxLines: 10,
                           ),
                         ],
                       ),
