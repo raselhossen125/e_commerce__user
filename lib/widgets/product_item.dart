@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:e_commerce__user/model/product_model.dart';
+import 'package:e_commerce__user/untils/colors.dart';
 import 'package:flutter/material.dart';
 import '../pages/product_details_page.dart';
 import '../untils/constransts.dart';
@@ -54,13 +55,13 @@ class ProductItem extends StatelessWidget {
                               fit: BoxFit.contain)))),
               SizedBox(height: 7.0),
               Text('$currencySymbol ${productModel.salePrice.toString()}',
-                  style: TextStyle(color: Color(0xFFCC8053), fontSize: 14.0)),
+                  style: TextStyle(color: appColor.cardColor, fontSize: 15.0)),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 child: Text(productModel.name!,
                     style: TextStyle(
                         color: Color(0xFF575E67),
-                        fontSize: 14.0,
+                        fontSize: 15.0,
                         overflow: TextOverflow.ellipsis)),
               ),
               Padding(
@@ -72,10 +73,10 @@ class ProductItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Icon(Icons.shopping_basket,
-                        color: Color(0xFFD17E50), size: 13.0),
+                        color: Color(0xFFEF7532), size: 14.0),
                     Text('Add to cart',
                         style:
-                            TextStyle(color: Color(0xFFD17E50), fontSize: 12.0))
+                            TextStyle(color: appColor.cardColor, fontSize: 14.0))
                   ],
                 ),
               ),

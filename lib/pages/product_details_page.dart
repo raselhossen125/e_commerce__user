@@ -16,13 +16,11 @@ class ProductDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _appbar = AppBar(
       title: Text("Details"),
-      actions: [
-        IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: Icon(Icons.keyboard_arrow_left_outlined))
-      ],
+      leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back)),
     );
 
     final height = MediaQuery.of(context).size.height -
@@ -48,7 +46,7 @@ class ProductDetailsPage extends StatelessWidget {
                     placeholder: 'images/product.jpg',
                     image: product.imageUrl!,
                     fadeInCurve: Curves.bounceInOut,
-                    fadeInDuration: Duration(seconds: 3),
+                    fadeInDuration: Duration(seconds: 2),
                     width: double.infinity,
                     height: height * 0.40,
                     fit: BoxFit.contain,
@@ -65,7 +63,7 @@ class ProductDetailsPage extends StatelessWidget {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
-                              fontSize: 18,
+                              fontSize: 20,
                             ),
                           ),
                           SizedBox(height: height * 0.01),
@@ -79,11 +77,15 @@ class ProductDetailsPage extends StatelessWidget {
                           ),
                           SizedBox(height: height * 0.0250),
                           Text(
-                            product.descripton ?? 'Not Available', textAlign: TextAlign.justify,
+                            product.descripton ?? 'Not Available',
+                            textAlign: TextAlign.justify,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 16,
+                              overflow: TextOverflow.ellipsis,
                             ),
+                            softWrap: false,
+                            maxLines: 10,
                           ),
                         ],
                       ),

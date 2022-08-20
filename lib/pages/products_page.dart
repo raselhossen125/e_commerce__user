@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, unused_local_variable, sort_child_properties_last, unused_field, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, no_leading_underscores_for_local_identifiers
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, unused_local_variable, sort_child_properties_last, unused_field, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, no_leading_underscores_for_local_identifiers, unused_element
 
 import 'package:e_commerce__user/untils/colors.dart';
 import 'package:e_commerce__user/widgets/product_item.dart';
@@ -14,17 +14,9 @@ class ProductsPage extends StatefulWidget {
   State<ProductsPage> createState() => _ProductsPageState();
 }
 
-class _ProductsPageState extends State<ProductsPage>
-    with SingleTickerProviderStateMixin {
+class _ProductsPageState extends State<ProductsPage> {
   late ProductProvider provider;
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    _tabController = TabController(
-        length: 3, vsync: this);
-    super.initState();
-  }
+  int chipValue = 0;
 
   @override
   void didChangeDependencies() {
@@ -36,9 +28,8 @@ class _ProductsPageState extends State<ProductsPage>
 
   @override
   Widget build(BuildContext context) {
-    // TabController _tabController =
-    //     TabController(length: provider.categoryNameList.length, vsync: this);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Products'),
       ),
@@ -50,7 +41,7 @@ class _ProductsPageState extends State<ProductsPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 10, left: 10),
+                    padding: EdgeInsets.only(top: 15, left: 10, bottom: 5),
                     child: Text(
                       'Categories',
                       style: TextStyle(
@@ -60,78 +51,48 @@ class _ProductsPageState extends State<ProductsPage>
                     ),
                   ),
                   SizedBox(
-                    height: 50,
                     width: MediaQuery.of(context).size.width,
-                    child: TabBar(
-                      controller: _tabController,
-                      indicatorColor: Colors.transparent,
-                      labelColor: appColor.cardBtnColor,
-                      isScrollable: true,
-                      labelPadding: EdgeInsets.only(right: 15.0, left: 10),
-                      unselectedLabelColor: Colors.grey,
-                      tabs: [
-                        Tab(
-                          child: Text('All',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                              )),
-                        ),
-                        // ListView.builder(
-                        //     itemCount: provider.categoryNameList.length,
-                        //     itemBuilder: (context, index) {
-                        //       print(provider.categoryNameList.length);
-                        //       return Tab(
-                        //         child: Text(provider.categoryNameList[index],
-                        //             style: TextStyle(
-                        //               fontSize: 18.0,
-                        //             )),
-                        //       );
-                        //     }),
-                        // Tab(
-                        //   child: Text('All',
-                        //       style: TextStyle(
-                        //         fontSize: 18.0,
-                        //       )),
-                        // ),
-                        Tab(
-                          child: Text('Laptop',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                              )),
-                        ),
-                        Tab(
-                          child: Text('Smart Phone',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Container(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height - 193,
-                      child: TabBarView(controller: _tabController, children: [
-                        Expanded(
-                          child: GridView.builder(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            itemCount: provider.productList.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisSpacing: 10.0,
-                                    mainAxisSpacing: 15.0,
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 0.88),
-                            itemBuilder: (context, index) {
-                              final product = provider.productList[index];
-                              return ProductItem(productModel: product);
+                    height: 50,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: provider.categoryList.length,
+                      itemBuilder: (context, index) {
+                        final data = provider.categoryNameList[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 5, left: 10),
+                          child: ChoiceChip(
+                            labelStyle: TextStyle(
+                              color: appColor.cardColor,
+                            ),
+                            selectedColor: Colors.grey.withAlpha(400),
+                            label: Text(data),
+                            selected: chipValue == index,
+                            onSelected: (value) {
+                              setState(() {
+                                chipValue = value ? index : 0;
+                              });
                             },
                           ),
-                        ),
-                        Center(child: Text('Laptop')),
-                        Center(child: Text('Smart Phone')),
-                      ]))
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Expanded(
+                    child: GridView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      itemCount: provider.productList.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisSpacing: 10.0,
+                          mainAxisSpacing: 15.0,
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.86),
+                      itemBuilder: (context, index) {
+                        final product = provider.productList[index];
+                        return ProductItem(productModel: product);
+                      },
+                    ),
+                  )
                 ],
               )
             : Center(
