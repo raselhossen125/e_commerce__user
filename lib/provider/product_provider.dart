@@ -13,6 +13,7 @@ import '../model/purchase_model.dart';
 class ProductProvider extends ChangeNotifier {
   List<CategoryModel> categoryList = [];
   List<ProductModel> productList = [];
+  List<ProductModel> featuredProductList = [];
   List<PurchaseModel> purchaseListOfSpecefixProduct = [];
   List<String> categoryNameList = [];
 
@@ -22,6 +23,7 @@ class ProductProvider extends ChangeNotifier {
           (index) => CategoryModel.fromMap(snapsort.docs[index].data()));
       categoryNameList = List.generate(
           categoryList.length, (index) => categoryList[index].catName!);
+      categoryNameList.insert(0, 'All');
       notifyListeners();
     });
   }
@@ -30,6 +32,20 @@ class ProductProvider extends ChangeNotifier {
     DBHelper.getAllProducts().listen((snapsort) {
       productList = List.generate(snapsort.docs.length,
           (index) => ProductModel.fromMap(snapsort.docs[index].data()));
+    });
+  }
+
+  getAllFeaturedProducts() {
+    DBHelper.getAllFeaturedProducts().listen((snapsort) {
+      featuredProductList = List.generate(snapsort.docs.length,
+              (index) => ProductModel.fromMap(snapsort.docs[index].data()));
+    });
+  }
+
+  getAllProductsByCategory(String category) {
+    DBHelper.getAllProductsByCategory(category).listen((snapsort) {
+      productList = List.generate(snapsort.docs.length,
+              (index) => ProductModel.fromMap(snapsort.docs[index].data()));
     });
   }
 

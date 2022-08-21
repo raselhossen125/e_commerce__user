@@ -240,6 +240,7 @@ class _LogInPageState extends State<LogInPage> {
                             name: value.user!.displayName ?? 'Not Available',
                             mobile: value.user!.phoneNumber ?? 'Not Available',
                             email: value.user!.email!,
+                            image: value.user!.photoURL,
                             userCreationTime: Timestamp.fromDate(
                                 value.user!.metadata.creationTime!),
                           );

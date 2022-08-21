@@ -13,6 +13,7 @@ import 'pages/auth/logIn_page.dart';
 import 'pages/product_details_page.dart';
 import 'pages/products_page.dart';
 import 'pages/profile_page.dart';
+import 'provider/cart_provider.dart';
 import 'provider/order_provider.dart';
 import 'provider/product_provider.dart';
 
@@ -32,6 +33,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ProductProvider()),
         ChangeNotifierProvider(create: (context) => OrderProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => CartProvider()),
       ],
       child: const MyApp(),
     ),

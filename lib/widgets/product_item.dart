@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:e_commerce__user/model/product_model.dart';
+import 'package:e_commerce__user/provider/cart_provider.dart';
 import 'package:e_commerce__user/untils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../pages/product_details_page.dart';
 import '../untils/constransts.dart';
 
@@ -69,16 +71,29 @@ class ProductItem extends StatelessWidget {
                   child: Container(color: Color(0xFFEBEBEB), height: 1.0)),
               Padding(
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(Icons.shopping_basket,
-                        color: Color(0xFFEF7532), size: 14.0),
-                    Text('Add to cart',
-                        style:
-                            TextStyle(color: appColor.cardColor, fontSize: 14.0))
-                  ],
-                ),
+                child:
+                    Consumer<CartProvider>(builder: (context, provider, child) {
+                  final isInCart = provider.isInCart(productModel.id!);
+                  return InkWell(
+                    onTap: () {
+
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(
+                            isInCart
+                                ? Icons.remove_shopping_cart
+                                : Icons.shopping_basket,
+                            color: Color(0xFFEF7532),
+                            size: 14.0),
+                        Text(isInCart ? 'Remove to cart' : 'Add to cart',
+                            style: TextStyle(
+                                color: appColor.cardColor, fontSize: 14.0))
+                      ],
+                    ),
+                  );
+                }),
               ),
             ],
           ),
