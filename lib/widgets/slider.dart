@@ -84,10 +84,10 @@ class _MySliderState extends State<MySlider> {
   Widget buildIndicator(int length) => AnimatedSmoothIndicator(
         activeIndex: activeIndex,
         count: length,
-        effect: SlideEffect(
-          dotHeight: 10,
-          dotWidth: 10,
-          dotColor: Colors.grey.withOpacity(0.5),
+        effect: ScrollingDotsEffect(
+          dotHeight: 8,
+          dotWidth: 8,
+          dotColor: Colors.grey.withOpacity(0.6),
           activeDotColor: appColor.cardColor,
         ),
       );
