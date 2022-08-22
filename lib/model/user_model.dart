@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce__user/model/address_model.dart';
 
 const userUid = 'uId';
 const userName = 'name';
 const userEmail = 'email';
 const userPhone = 'mobile';
 const userImage = 'image';
+const userAddressModel = 'addressModel';
 const userTimeStamp = 'userCreationTime';
 const userAvailable = 'available';
 const userDeviceToken = 'deviceToken';
@@ -15,6 +17,7 @@ class UserModel {
   String email;
   String? mobile;
   String? image;
+  AddressModel? addressModel;
   Timestamp userCreationTime;
   bool available;
   String? deviceToken;
@@ -25,6 +28,7 @@ class UserModel {
     required this.email,
     this.mobile,
     this.image,
+    this.addressModel,
     required this.userCreationTime,
     this.available = false,
     this.deviceToken,
@@ -37,6 +41,7 @@ class UserModel {
       userEmail: email,
       userPhone: mobile,
       userImage: image,
+      userAddressModel: addressModel,
       userTimeStamp: userCreationTime,
       userAvailable: available,
       userDeviceToken: deviceToken,
@@ -44,13 +49,14 @@ class UserModel {
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) => UserModel(
-    uId: map[userUid],
-    name: map[userName],
-    email: map[userEmail],
-    mobile: map[userPhone],
-    image: map[userImage],
-    userCreationTime: map[userTimeStamp],
-    available: map[userAvailable],
-    deviceToken: map[userDeviceToken],
-  );
+        uId: map[userUid],
+        name: map[userName],
+        email: map[userEmail],
+        mobile: map[userPhone],
+        image: map[userImage],
+        addressModel: map[userAddressModel],
+        userCreationTime: map[userTimeStamp],
+        available: map[userAvailable],
+        deviceToken: map[userDeviceToken],
+      );
 }

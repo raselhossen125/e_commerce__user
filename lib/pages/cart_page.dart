@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
+import 'package:e_commerce__user/pages/cheakout_page.dart';
 import 'package:e_commerce__user/provider/cart_provider.dart';
 import 'package:e_commerce__user/untils/colors.dart';
 import 'package:e_commerce__user/untils/constransts.dart';
@@ -32,9 +33,9 @@ class CartPage extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 5),
                     child: CartItem(
-                      onIncrease: () {
-                        provider.increaseQuantity(cartM);
-                      },
+                        onIncrease: () {
+                          provider.increaseQuantity(cartM);
+                        },
                         onDecrease: () {
                           provider.decreaseQuantity(cartM);
                         },
@@ -48,31 +49,39 @@ class CartPage extends StatelessWidget {
                 },
               ),
             ),
-            Container(
-              height: 50,
-              width: double.infinity,
-              child: Card(
-                elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Sutotal : ',
-                        style: TextStyle(fontWeight: FontWeight.w500),
+            Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10, bottom: 12, left: 20, right: 15),
+                    child: Text(
+                      'Subtotal :  $currencySymbol${provider.getCartSubTotal()}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
                       ),
-                      Text('$currencySymbol${provider.getCartSubTotal()}'),
-                      Spacer(),
-                      Card(
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () =>
+                        Navigator.of(context).pushNamed(CheakoutPage.routeName),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 5, left: 15, right: 15),
+                      child: Card(
                         elevation: 7,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         child: Container(
                           height: 50,
-                          width: 100,
+                          width: double.infinity,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
+                            borderRadius: BorderRadius.circular(15),
                             color: appColor.cardColor,
                           ),
                           child: Center(
@@ -86,9 +95,9 @@ class CartPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             )
           ],

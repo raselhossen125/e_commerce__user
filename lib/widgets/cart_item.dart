@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: use_key_in_widget_constructors, sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps, prefer_const_constructors_in_immutables
 
 import 'package:e_commerce__user/model/cart_model.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +47,12 @@ class CartItem extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: Container(
-                      color: Colors.grey.withOpacity(0.1),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.1),
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
+                          )),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -64,7 +69,7 @@ class CartItem extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 7),
-                          Text('$currencySymbol ${priceWithQuantity}',
+                          Text('$currencySymbol${cartModel.salePrice}',
                               style:
                                   TextStyle(fontSize: 14, color: Colors.grey)),
                           Row(
@@ -98,25 +103,24 @@ class CartItem extends StatelessWidget {
         ),
         SizedBox(
           width: 60,
-          child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 FittedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Text(
-                      '$currencySymbol${cartModel.salePrice}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                      ),
+                  child: Text(
+                    '$currencySymbol${priceWithQuantity}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: onDelate,
-                  icon: Icon(
+                SizedBox(height: 12),
+                InkWell(
+                  onTap: onDelate,
+                  child: Icon(
                     Icons.delete,
                     color: Colors.red,
                   ),

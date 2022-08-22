@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'pages/auth/phone_verify.dart';
 import 'pages/auth/register_page.dart';
 import 'pages/cart_page.dart';
+import 'pages/cheakout_page.dart';
 import 'pages/launcher_page.dart';
 import 'pages/auth/logIn_page.dart';
 import 'pages/product_details_page.dart';
@@ -76,6 +77,7 @@ class MyApp extends StatelessWidget {
         ProductDetailsPage.routeName: (_) => ProductDetailsPage(),
         ProfilePage.routeName: (_) => ProfilePage(),
         CartPage.routeName: (_) => CartPage(),
+        CheakoutPage.routeName: (_) => CheakoutPage(),
       },
     );
   }

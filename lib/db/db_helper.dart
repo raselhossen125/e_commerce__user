@@ -24,12 +24,14 @@ class DBHelper {
         .set(cartModel.toMap());
   }
 
-  static Future<void> updateCartItemQuantity(String uid, String pid, num quantity) {
-    return _db.collection(usersCollection)
+  static Future<void> updateCartItemQuantity(
+      String uid, String pid, num quantity) {
+    return _db
+        .collection(usersCollection)
         .doc(uid)
         .collection(cartCollection)
         .doc(pid)
-        .update({CartQuantity : quantity});
+        .update({CartQuantity: quantity});
   }
 
   static Future<void> removeFromcart(String uid, String pid) {
