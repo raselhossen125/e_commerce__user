@@ -7,7 +7,13 @@ import '../model/cart_model.dart';
 class CartProvider extends ChangeNotifier {
   List<CartModel> cartList = [];
 
+  Future<void> addToCart(CartModel cartModel) {
+    return DBHelper.addToCart(AuthService.user!.uid, cartModel);
+  }
 
+  Future<void> removeFromCart(String productId) {
+    return DBHelper.removeFromcart(AuthService.user!.uid, productId);
+  }
 
   getAllCartItems() {
     DBHelper.getAllCartItems(AuthService.user!.uid).listen((snapsort) {
@@ -17,7 +23,31 @@ class CartProvider extends ChangeNotifier {
     });
   }
 
+  increaseQuantity(CartModel cartModel) async {
+    await DBHelper.updateCartItemQuantity(
+        AuthService.user!.uid, cartModel.productId!,
+        cartModel.quantity + 1);
+  }
+
+  decreaseQuantity(CartModel cartModel) async {
+    if(cartModel.quantity > 1) {
+      await DBHelper.updateCartItemQuantity(
+          AuthService.user!.uid, cartModel.productId!,
+          cartModel.quantity - 1);
+    }
+  }
+
   int get totalItemsInCart => cartList.length;
+
+  num itemPriceWithQuantity(CartModel cartModel) => cartModel.salePrice * cartModel.quantity;
+
+  num getCartSubTotal() {
+    num total = 0;
+    for(var cartM in cartList) {
+      total += cartM.salePrice * cartM.quantity;
+    }
+    return total;
+  }
 
   bool isInCart(String productId) {
     bool flag = false;

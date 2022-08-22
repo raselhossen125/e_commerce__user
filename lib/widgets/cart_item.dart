@@ -1,10 +1,23 @@
 // ignore_for_file: use_key_in_widget_constructors, sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:e_commerce__user/model/cart_model.dart';
 import 'package:flutter/material.dart';
 
 import '../untils/constransts.dart';
 
 class CartItem extends StatelessWidget {
+  final CartModel cartModel;
+  final num priceWithQuantity;
+  final VoidCallback onIncrease, onDecrease, onDelate;
+
+  CartItem({
+    required this.cartModel,
+    required this.priceWithQuantity,
+    required this.onIncrease,
+    required this.onDecrease,
+    required this.onDelate,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -23,8 +36,8 @@ class CartItem extends StatelessWidget {
                     flex: 1,
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: Image.asset(
-                        'images/person.png',
+                      child: Image.network(
+                        cartModel.imageUrl!,
                         height: 70,
                         width: 70,
                         fit: BoxFit.contain,
@@ -41,7 +54,7 @@ class CartItem extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Text(
-                              'Samsung Galaxy A20',
+                              cartModel.productName!,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16,
@@ -51,20 +64,26 @@ class CartItem extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 7),
-                          Text('$currencySymbol ${'22000'}',
+                          Text('$currencySymbol ${priceWithQuantity}',
                               style:
                                   TextStyle(fontSize: 14, color: Colors.grey)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Chip(
-                                elevation: 5,
-                                label: Text('-'),
+                              InkWell(
+                                onTap: onDecrease,
+                                child: Chip(
+                                  elevation: 5,
+                                  label: Text('-'),
+                                ),
                               ),
-                              Text('10'),
-                              Chip(
-                                elevation: 5,
-                                label: Text('+'),
+                              Text(cartModel.quantity.toString()),
+                              InkWell(
+                                onTap: onIncrease,
+                                child: Chip(
+                                  elevation: 5,
+                                  label: Text('+'),
+                                ),
                               ),
                             ],
                           )
@@ -80,17 +99,29 @@ class CartItem extends StatelessWidget {
         SizedBox(
           width: 60,
           child: Center(
-            child: FittedBox(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 5),
-                child: Text(
-                  '$currencySymbol${'22000'}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Text(
+                      '$currencySymbol${cartModel.salePrice}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                IconButton(
+                  onPressed: onDelate,
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                ),
+              ],
             ),
           ),
         )

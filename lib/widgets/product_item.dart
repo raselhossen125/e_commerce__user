@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
+import 'package:e_commerce__user/model/cart_model.dart';
 import 'package:e_commerce__user/model/product_model.dart';
 import 'package:e_commerce__user/provider/cart_provider.dart';
 import 'package:e_commerce__user/untils/colors.dart';
@@ -76,7 +77,17 @@ class ProductItem extends StatelessWidget {
                   final isInCart = provider.isInCart(productModel.id!);
                   return InkWell(
                     onTap: () {
-
+                      if (isInCart) {
+                        provider.removeFromCart(productModel.id!);
+                      } else {
+                        final cartModel = CartModel(
+                          productId: productModel.id,
+                          productName: productModel.name,
+                          salePrice: productModel.salePrice,
+                          imageUrl: productModel.imageUrl,
+                        );
+                        provider.addToCart(cartModel);
+                      }
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
