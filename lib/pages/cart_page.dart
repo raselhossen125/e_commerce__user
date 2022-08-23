@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
-
-import 'package:e_commerce__user/pages/cheakout_page.dart';
 import 'package:e_commerce__user/provider/cart_provider.dart';
 import 'package:e_commerce__user/untils/colors.dart';
 import 'package:e_commerce__user/untils/constransts.dart';
 import 'package:e_commerce__user/widgets/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'checkout_page.dart';
 
 class CartPage extends StatelessWidget {
   static const routeName = '/cart';
@@ -69,7 +69,7 @@ class CartPage extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () =>
-                        Navigator.of(context).pushNamed(CheakoutPage.routeName),
+                        Navigator.of(context).pushNamed(CheckoutPage.routeName),
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 5, left: 15, right: 15),
                       child: Card(
