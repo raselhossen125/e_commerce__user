@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce__user/auth/auth_service.dart';
 import 'package:e_commerce__user/model/user_model.dart';
+import 'package:e_commerce__user/pages/user_address_page.dart';
 import 'package:e_commerce__user/provider/user_provider.dart';
 import 'package:e_commerce__user/untils/constransts.dart';
 import 'package:flutter/material.dart';
@@ -23,14 +24,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late OrderProvider orderProvider;
   late UserProvider userProvider;
   String groupValue = "COD";
+  bool isInit = true;
 
   @override
   void didChangeDependencies() {
-    cartProvider = Provider.of<CartProvider>(context);
-    orderProvider = Provider.of<OrderProvider>(context);
-    userProvider = Provider.of<UserProvider>(context);
-    orderProvider.getOrderConstants();
-    super.didChangeDependencies();
+    if (isInit) {
+      cartProvider = Provider.of<CartProvider>(context);
+      orderProvider = Provider.of<OrderProvider>(context);
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      orderProvider.getOrderConstants();
+      super.didChangeDependencies();
+    }
+    isInit = false;
   }
 
   @override
@@ -141,7 +146,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(15))),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed(UserAddressPage.routeName);
+                                },
                                 child: Text("Set"))
                           ],
                         ),

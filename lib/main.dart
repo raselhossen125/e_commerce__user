@@ -15,6 +15,7 @@ import 'pages/auth/logIn_page.dart';
 import 'pages/product_details_page.dart';
 import 'pages/products_page.dart';
 import 'pages/profile_page.dart';
+import 'pages/user_address_page.dart';
 import 'provider/cart_provider.dart';
 import 'provider/order_provider.dart';
 import 'provider/product_provider.dart';
@@ -78,6 +79,7 @@ class MyApp extends StatelessWidget {
         ProfilePage.routeName: (_) => ProfilePage(),
         CartPage.routeName: (_) => CartPage(),
         CheckoutPage.routeName: (_) => CheckoutPage(),
+        UserAddressPage.routeName: (_) => UserAddressPage(),
       },
     );
   }
