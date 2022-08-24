@@ -23,7 +23,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late CartProvider cartProvider;
   late OrderProvider orderProvider;
   late UserProvider userProvider;
-  String groupValue = "COD";
+  String paymentMethodGroupValue = PaymentMethod.cod;
   bool isInit = true;
 
   @override
@@ -33,9 +33,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
       orderProvider = Provider.of<OrderProvider>(context);
       userProvider = Provider.of<UserProvider>(context, listen: false);
       orderProvider.getOrderConstants();
+      isInit = false;
       super.didChangeDependencies();
     }
-    isInit = false;
   }
 
   @override
@@ -66,7 +66,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               dense: true,
                               title: Text(cartModel.productName!),
                               trailing: Text(
-                                  "${cartModel.quantity}* ৳${cartModel.salePrice}"),
+                                  "${cartModel.quantity} X ৳${cartModel.salePrice}"),
                             ))
                         .toList(),
                   ),
@@ -126,6 +126,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   style: Theme.of(context).textTheme.headline6,
                   textAlign: TextAlign.center,
                 ),
+                SizedBox(
+                  height: 5,
+                ),
                 Card(
                     child:
                         StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -139,9 +142,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(addressM == null
-                                ? 'No address found'
-                                : '${addressM.streetAddress} \n ${addressM.area} \n ${addressM.city} \n ${addressM.zipCode}'),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Text(addressM == null
+                                  ? 'No address found'
+                                  : '${addressM.streetAddress} \n ${addressM.city} \n ${addressM.area} \n ${addressM.zipCode}'),
+                            ),
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
@@ -168,45 +174,40 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   style: Theme.of(context).textTheme.headline6,
                   textAlign: TextAlign.center,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ListTile(
-                        title: Text("COD"),
-                        leading: Radio<String>(
-                            value: "COD",
-                            groupValue: groupValue,
-                            fillColor: MaterialStateColor.resolveWith(
-                                (states) => groupValue == "COD"
-                                    ? Colors.red
-                                    : Colors.grey),
-                            onChanged: (value) {
-                              setState(() {
-                                groupValue = value as String;
-                              });
-                            }),
-                      ),
-                    ),
-                    Expanded(
-                      child: ListTile(
-                        title: Text("Online"),
-                        leading: Radio<String>(
-                          value: "Online",
-                          groupValue: groupValue,
-                          fillColor: MaterialStateColor.resolveWith((states) =>
-                              groupValue == "Online"
-                                  ? Colors.red
-                                  : Colors.grey),
+                SizedBox(
+                  height: 5,
+                ),
+                 Card(
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Radio<String>(
+                          value: PaymentMethod.cod,
+                          groupValue: paymentMethodGroupValue,
                           onChanged: (value) {
                             setState(() {
-                              groupValue = value as String;
+                              paymentMethodGroupValue = value!;
                             });
                           },
                         ),
-                      ),
-                    )
-                  ],
-                )
+                        const Text(PaymentMethod.cod),
+                        const SizedBox(width: 10,),
+                        Radio<String>(
+                          value: PaymentMethod.online,
+                          groupValue: paymentMethodGroupValue,
+                          onChanged: (value) {
+                            setState(() {
+                              paymentMethodGroupValue = value!;
+                            });
+                          },
+                        ),
+                        const Text(PaymentMethod.online),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_if_null_operators
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce__user/model/address_model.dart';
 
@@ -54,7 +56,9 @@ class UserModel {
         email: map[userEmail],
         mobile: map[userPhone],
         image: map[userImage],
-        addressModel: map[userAddressModel],
+        addressModel: map[userAddressModel] == null
+            ? map[userAddressModel]
+            : AddressModel.fromMap(map[userAddressModel]),
         userCreationTime: map[userTimeStamp],
         available: map[userAvailable],
         deviceToken: map[userDeviceToken],

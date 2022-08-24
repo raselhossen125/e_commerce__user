@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:e_commerce__user/model/date_model.dart';
 
 const String OrdOrderId = 'orderId';

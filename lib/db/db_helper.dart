@@ -10,6 +10,7 @@ class DBHelper {
   static const usersCollection = 'Users';
   static const cartCollection = 'cart';
   static const ordersCollection = 'Orders';
+  static const citiesCollection = 'Cities';
   static const ordersDetailsCollection = 'OrderDetails';
   static const settingsCollection = 'Settings';
   static const documentOrderConstant = 'OrderConstant';
@@ -48,6 +49,9 @@ class DBHelper {
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
       _db.collection(productsCollection).snapshots();
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCitiess() =>
+      _db.collection(citiesCollection).snapshots();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCartItems(
           String uid) =>
