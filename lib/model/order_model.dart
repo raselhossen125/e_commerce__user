@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:e_commerce__user/model/address_model.dart';
 import 'package:e_commerce__user/model/date_model.dart';
 
 const String OrdOrderId = 'orderId';
@@ -23,7 +24,7 @@ class OrderModel {
   num discount;
   num vat;
   num deliveryCharge;
-  String deliveryAddress;
+  AddressModel deliveryAddress;
 
   OrderModel({
     this.orderId,
@@ -49,7 +50,7 @@ class OrderModel {
       OrdDiscount: discount,
       OrdVat: vat,
       OrdDeliveryCharge: deliveryCharge,
-      OrdDeliveryAddress: deliveryAddress,
+      OrdDeliveryAddress: deliveryAddress.toMap(),
     };
   }
 
@@ -63,6 +64,6 @@ class OrderModel {
     discount: map[OrdDiscount],
     vat: map[OrdVat],
     deliveryCharge: map[OrdDeliveryCharge],
-    deliveryAddress: map[OrdDeliveryAddress],
+    deliveryAddress: AddressModel.fromMap(map[OrdDeliveryAddress]),
   );
 }

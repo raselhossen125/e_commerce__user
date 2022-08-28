@@ -11,6 +11,7 @@ import '../db/db_helper.dart';
 import '../model/user_model.dart';
 
 class UserProvider extends ChangeNotifier {
+  UserModel? userModel;
   List<CityModel> cityList = [];
 
   getAllCities() {

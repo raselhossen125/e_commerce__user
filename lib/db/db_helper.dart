@@ -3,6 +3,8 @@ import 'package:e_commerce__user/model/product_model.dart';
 import 'package:e_commerce__user/model/user_model.dart';
 
 import '../model/cart_model.dart';
+import '../model/category_model.dart';
+import '../model/order_model.dart';
 
 class DBHelper {
   static const categoriesCollection = 'Categories';
@@ -14,7 +16,51 @@ class DBHelper {
   static const ordersDetailsCollection = 'OrderDetails';
   static const settingsCollection = 'Settings';
   static const documentOrderConstant = 'OrderConstant';
+
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  static Future<void> addNewOrder(OrderModel orderModel, List<CartModel> cartList) {
+    final wb = _db.batch();
+    final orderDoc = _db.collection(ordersCollection).doc();
+    orderModel.orderId = orderDoc.id;
+    wb.set(orderDoc, orderModel.toMap());
+    for(var cartM in cartList) {
+      final cartDoc = orderDoc.collection(ordersDetailsCollection).doc(cartM.productId);
+      wb.set(cartDoc, cartM.toMap());
+    }
+    return wb.commit();
+  }
+
+  static Future<void> updateProductStock(List<CartModel> cartList) {
+    final wb = _db.batch();
+    for(var cartM in cartList) {
+      final productDoc = _db.collection(productsCollection).doc(cartM.productId);
+      wb.update(productDoc, {ProductStock : (cartM.stock - cartM.quantity)});
+    }
+    return wb.commit();
+  }
+
+  static Future<void> updateCategoryProductCount(
+      List<CartModel> cartList,
+      List<CategoryModel> categoryList) {
+    final wb = _db.batch();
+    for(var cartM in cartList) {
+      final catM = categoryList.firstWhere((element) => element.catName == cartM.category);
+      final catDoc = _db.collection(categoriesCollection).doc(catM.catId);
+      wb.update(catDoc, {CategoryProductCount : catM.count - cartM.quantity});
+    }
+    return wb.commit();
+  }
+
+  static Future<void> clearUserCartItems(String uid, List<CartModel> cartList) {
+    final wb = _db.batch();
+    final userDoc = _db.collection(usersCollection).doc(uid);
+    for(var cartM in cartList) {
+      final cartDoc = userDoc.collection(cartCollection).doc(cartM.productId);
+      wb.delete(cartDoc);
+    }
+    return wb.commit();
+  }
 
   static Future<void> addToCart(String uid, CartModel cartModel) {
     return _db
@@ -48,7 +94,7 @@ class DBHelper {
       _db.collection(categoriesCollection).snapshots();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
-      _db.collection(productsCollection).snapshots();
+      _db.collection(productsCollection).where(ProductAvailable, isEqualTo: true).snapshots();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCitiess() =>
       _db.collection(citiesCollection).snapshots();

@@ -5,13 +5,17 @@ const String CartProductName = 'productName';
 const String CartImageUrl = 'imageUrl';
 const String CartSalePrice = 'salePrice';
 const String CartQuantity = 'quantity';
+const String CartProductStock = 'stock';
+const String CartProductCategory = 'category';
 
 class CartModel {
   String? productId;
   String? productName;
   String? imageUrl;
+  String? category;
   num salePrice;
   num quantity;
+  num stock;
 
   CartModel({
     this.productId,
@@ -19,6 +23,8 @@ class CartModel {
     this.imageUrl,
     this.quantity = 1,
     required this.salePrice,
+    this.category,
+    required this.stock,
   });
 
   Map<String, dynamic> toMap() {
@@ -28,6 +34,8 @@ class CartModel {
       CartImageUrl: imageUrl,
       CartQuantity: quantity,
       CartSalePrice: salePrice,
+      CartProductStock: stock,
+      CartProductCategory: category,
     };
   }
 
@@ -37,5 +45,7 @@ class CartModel {
     imageUrl: map[CartImageUrl],
     quantity: map[CartQuantity],
     salePrice: map[CartSalePrice],
+    stock: map[CartProductStock],
+    category: map[CartProductCategory],
   );
 }

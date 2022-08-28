@@ -12,6 +12,7 @@ import 'pages/cart_page.dart';
 import 'pages/checkout_page.dart';
 import 'pages/launcher_page.dart';
 import 'pages/auth/logIn_page.dart';
+import 'pages/order_successful_page.dart';
 import 'pages/product_details_page.dart';
 import 'pages/products_page.dart';
 import 'pages/profile_page.dart';
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
         CartPage.routeName: (_) => CartPage(),
         CheckoutPage.routeName: (_) => CheckoutPage(),
         UserAddressPage.routeName: (_) => UserAddressPage(),
+        OrderSuccessfulPage.routeName: (_) => OrderSuccessfulPage(),
       },
     );
   }

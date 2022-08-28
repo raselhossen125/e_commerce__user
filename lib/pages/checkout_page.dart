@@ -3,13 +3,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce__user/auth/auth_service.dart';
 import 'package:e_commerce__user/model/user_model.dart';
+import 'package:e_commerce__user/pages/products_page.dart';
 import 'package:e_commerce__user/pages/user_address_page.dart';
 import 'package:e_commerce__user/provider/user_provider.dart';
 import 'package:e_commerce__user/untils/constransts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../model/date_model.dart';
+import '../model/order_model.dart';
 import '../provider/cart_provider.dart';
 import '../provider/order_provider.dart';
+import '../provider/product_provider.dart';
+import '../untils/helper_function.dart';
+import 'order_successful_page.dart';
 
 class CheckoutPage extends StatefulWidget {
   static const routeName = "check-out";
@@ -136,6 +142,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final userM = UserModel.fromMap(snapshot.data!.data()!);
+                      userProvider.userModel = userM;
                       final addressM = userM.addressModel;
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -146,7 +153,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Text(addressM == null
                                   ? 'No address found'
-                                  : '${addressM.streetAddress} \n ${addressM.city} \n ${addressM.area} \n ${addressM.zipCode}'),
+                                  : '${addressM.streetAddress}\n${addressM.city}\n${addressM.area}\n${addressM.zipCode}'),
                             ),
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -217,11 +224,55 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15))),
-                onPressed: () {},
+                onPressed: _saveOrder,
                 child: const Text("Place order")),
           )
         ],
       ),
     );
+  }
+
+  void _saveOrder() {
+    if(userProvider.userModel?.addressModel == null) {
+      showMsg(context, 'Please provide a delivery address');
+      return;
+    }
+    final orderM = OrderModel(
+      userId: AuthService.user!.uid,
+      deliveryAddress: userProvider.userModel!.addressModel!,
+      paymentMethod: paymentMethodGroupValue,
+      orderStatus: OrderStatus.pending,
+      dateModel: DateModel(
+        timestamp: Timestamp.fromDate(DateTime.now()),
+        day: DateTime.now().day,
+        month: DateTime.now().month,
+        year: DateTime.now().year,
+      ),
+      grandTotal: orderProvider.getGrandTotal(cartProvider.getCartSubTotal()),
+      discount: orderProvider.orderConstantsModel.discount,
+      vat: orderProvider.orderConstantsModel.vat,
+      deliveryCharge: orderProvider.orderConstantsModel.deliveryCharge,
+    );
+
+    orderProvider.addOrder(orderM, cartProvider.cartList)
+      .then((_) {
+        orderProvider.updateProductStock(cartProvider.cartList)
+            .then((_) {
+                orderProvider.updateCategoryProductCount(
+                    cartProvider.cartList,
+                    context.read<ProductProvider>().categoryList)
+                    .then((_) {
+                        orderProvider.clearUserCartItems(cartProvider.cartList)
+                            .then((_) {
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    OrderSuccessfulPage.routeName,
+                                        ModalRoute.withName(ProductsPage.routeName));
+                        });
+                });
+        });
+    });
+
+
   }
 }
