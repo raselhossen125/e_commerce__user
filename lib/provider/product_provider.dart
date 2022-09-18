@@ -2,6 +2,8 @@
 
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce__user/auth/auth_service.dart';
+import 'package:e_commerce__user/model/rating_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -59,5 +61,24 @@ class ProductProvider extends ChangeNotifier {
     final uploadtask = photoRefarance.putFile(File(xFile.path));
     final snapshort = await uploadtask.whenComplete(() => null);
     return snapshort.ref.getDownloadURL();
+  }
+
+  Future<void> addNewRating(double value, String pid) async{
+    final ratingM = RatingModel(
+      userId: AuthService.user!.uid,
+      productId: pid,
+      rating: value
+    );
+    await DBHelper.addNewRating(ratingM);
+    final qSnapshot = await DBHelper.getAllRatingsByProduct(pid);
+    final List<RatingModel> ratingList =
+      List.generate(qSnapshot.docs.length, (index) =>
+      RatingModel.fromMap(qSnapshot.docs[index].data()));
+    double ratingValue = 0.0;
+    for(var ratingM in ratingList) {
+      ratingValue += ratingM.rating;
+    }
+    final avgRating = ratingValue / ratingList.length;
+    return DBHelper.updateProduct(pid, {ProductRating : avgRating});
   }
 }

@@ -24,26 +24,27 @@ class CartProvider extends ChangeNotifier {
   }
 
   increaseQuantity(CartModel cartModel) async {
-    await DBHelper.updateCartItemQuantity(
-        AuthService.user!.uid, cartModel.productId!,
-        cartModel.quantity + 1);
+    if (cartModel.quantity < cartModel.stock) {
+      await DBHelper.updateCartItemQuantity(
+          AuthService.user!.uid, cartModel.productId!, cartModel.quantity + 1);
+    }
   }
 
   decreaseQuantity(CartModel cartModel) async {
-    if(cartModel.quantity > 1) {
+    if (cartModel.quantity > 1) {
       await DBHelper.updateCartItemQuantity(
-          AuthService.user!.uid, cartModel.productId!,
-          cartModel.quantity - 1);
+          AuthService.user!.uid, cartModel.productId!, cartModel.quantity - 1);
     }
   }
 
   int get totalItemsInCart => cartList.length;
 
-  num itemPriceWithQuantity(CartModel cartModel) => cartModel.salePrice * cartModel.quantity;
+  num itemPriceWithQuantity(CartModel cartModel) =>
+      cartModel.salePrice * cartModel.quantity;
 
   num getCartSubTotal() {
     num total = 0;
-    for(var cartM in cartList) {
+    for (var cartM in cartList) {
       total += cartM.salePrice * cartM.quantity;
     }
     return total;

@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, sized_box_for_whitespace, prefer_const_literals_to_create_immutables
 
+import 'package:e_commerce__user/pages/cart_page.dart';
+import 'package:e_commerce__user/pages/order_page.dart';
 import 'package:e_commerce__user/pages/products_page.dart';
 import 'package:e_commerce__user/untils/colors.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +13,20 @@ class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(15),
+        )
+      ),
       child: Column(
         children: [
           Container(
             height: 250,
             width: double.infinity,
-            color: appColor.cardColor,
+            decoration: BoxDecoration(
+              color: appColor.cardColor,
+              borderRadius: BorderRadius.circular(25)
+            ),
             child: Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Column(
@@ -68,13 +78,13 @@ class MainDrawer extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  SizedBox(height: 5),
                   ListTile(
                     onTap: () {
                       Navigator.of(context)
                           .pushNamed(ProfilePage.routeName)
                           .then((value) {
-                        Navigator.pushReplacementNamed(
-                            context, ProductsPage.routeName);
+                        Navigator.of(context).pop();
                       });
                     },
                     leading: Icon(
@@ -82,6 +92,32 @@ class MainDrawer extends StatelessWidget {
                       color: appColor.cardColor,
                     ),
                     title: Text('My Profile'),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(CartPage.routeName)
+                          .then((value) {
+                        Navigator.of(context).pop();
+                      });
+                    },
+                    leading: Icon(
+                      Icons.shopping_cart,
+                      color: appColor.cardColor,
+                    ),
+                    title: Text('My Cart'),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(OrderPage.routeName)
+                          .then((value) => Navigator.of(context).pop());
+                    },
+                    leading: Icon(
+                      Icons.shopping_bag,
+                      color: appColor.cardColor,
+                    ),
+                    title: Text('My Orders'),
                   ),
                   ListTile(
                     onTap: () {
