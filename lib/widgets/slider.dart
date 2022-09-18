@@ -46,7 +46,8 @@ class _MySliderState extends State<MySlider> {
                     Positioned(
                       right: 10,
                       child: Chip(
-                        elevation: 5,
+                        backgroundColor: Colors.transparent,
+                        elevation: 1,
                         label: Text(product.name!),
                       ),
                     ),

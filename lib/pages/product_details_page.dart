@@ -63,7 +63,10 @@ class ProductDetailsPage extends StatelessWidget {
                       children: [
                         InkWell(
                           onTap: () {},
-                          child: Chip(label: Text('Add a comment')),
+                          child: Chip(
+                            backgroundColor: Colors.grey.withOpacity(0.2),
+                            label: Text('Add a comment'),
+                          ),
                         ),
                         SizedBox(width: 10),
                         InkWell(
@@ -84,7 +87,10 @@ class ProductDetailsPage extends StatelessWidget {
                               showMsg(context, 'You can not rate');
                             }
                           },
-                          child: Chip(label: Text('Rate this product')),
+                          child: Chip(
+                            backgroundColor: Colors.grey.withOpacity(0.2),
+                            label: Text('Rate this product'),
+                          ),
                         ),
                       ],
                     ),
